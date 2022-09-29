@@ -18,7 +18,8 @@ from ..mesh import mesh_elements as me
 
 
 def _generate_spins(points_lh, points_rh=None, unique=False, n_rep=100,
-                    random_state=None, surface_algorithm='FreeSurfer'):
+                    random_state=None, surface_algorithm='FreeSurfer',
+                    verbose=False):
     """ Generate rotational spins based on points that lie on a sphere.
 
     Parameters
@@ -86,6 +87,8 @@ def _generate_spins(points_lh, points_rh=None, unique=False, n_rep=100,
 
     rot = {}
     for i in range(n_rep):
+        if verbose:
+            print(f'Generating spin {i+1}/{n_rep}')
 
         # generate rotation for left
         rot['lh'], temp = np.linalg.qr(rs.normal(size=(3, 3)))
@@ -111,7 +114,8 @@ def _generate_spins(points_lh, points_rh=None, unique=False, n_rep=100,
 
 
 def spin_permutations(spheres, data, unique=False, n_rep=100,
-                      random_state=None, surface_algorithm='FreeSurfer'):
+                      random_state=None, surface_algorithm='FreeSurfer',
+                      verbose=False):
     """ Generate null data using spin permutations.
 
     Parameters
@@ -183,7 +187,8 @@ def spin_permutations(spheres, data, unique=False, n_rep=100,
 
     spin_idx = _generate_spins(points_lh, points_rh=points_rh, unique=unique,
                                n_rep=n_rep, random_state=random_state,
-                               surface_algorithm=surface_algorithm)
+                               surface_algorithm=surface_algorithm,
+                               verbose=verbose)
 
     spin_lh = spin_idx['lh']
     spin_rh = spin_idx.get('rh', None)
@@ -246,7 +251,7 @@ class SpinPermutations(BaseEstimator):
         self.random_state = random_state
         self.surface_algorithm = surface_algorithm
 
-    def fit(self, points_lh, points_rh=None):
+    def fit(self, points_lh, points_rh=None, verbose=False):
         """ Compute spin indices by random rotation.
 
         Parameters
@@ -268,7 +273,8 @@ class SpinPermutations(BaseEstimator):
         spin_idx = _generate_spins(points_lh, points_rh=points_rh,
                                    unique=self.unique, n_rep=self.n_rep,
                                    random_state=self.random_state,
-                                   surface_algorithm=self.surface_algorithm)
+                                   surface_algorithm=self.surface_algorithm,
+                                   verbose=False)
 
         self.spin_lh_ = spin_idx['lh']
         self.spin_rh_ = spin_idx.get('rh', None)
