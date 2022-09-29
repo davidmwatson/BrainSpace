@@ -179,21 +179,21 @@ def spin_permutations(spheres, data, unique=False, n_rep=100,
         raise ValueError("Unknown keys. Possible keys: {'lh', 'rh'}.")
 
     points_lh = spheres['lh']
-    points_rh = spheres.pop('rh', None)
+    points_rh = spheres.get('rh', None)
 
     spin_idx = _generate_spins(points_lh, points_rh=points_rh, unique=unique,
                                n_rep=n_rep, random_state=random_state,
                                surface_algorithm=surface_algorithm)
 
     spin_lh = spin_idx['lh']
-    spin_rh = spin_idx.pop('rh', None)
+    spin_rh = spin_idx.get('rh', None)
 
     x_lh = data['lh']
     rand_lh = x_lh[spin_lh]
     if spin_rh is None:
         return rand_lh
 
-    x_rh = data.pop('rh', None)
+    x_rh = data.get('rh', None)
     rand_rh = None
     if x_rh is not None:
         rand_rh = x_rh[spin_rh]
@@ -271,7 +271,7 @@ class SpinPermutations(BaseEstimator):
                                    surface_algorithm=self.surface_algorithm)
 
         self.spin_lh_ = spin_idx['lh']
-        self.spin_rh_ = spin_idx.pop('rh', None)
+        self.spin_rh_ = spin_idx.get('rh', None)
         return self
 
     def randomize(self, x_lh, x_rh=None):
