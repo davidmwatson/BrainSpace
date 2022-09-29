@@ -19,7 +19,6 @@ INSTALL_REQUIRES = ['numpy>=1.11.0',
                     'scipy>=0.17.0',
                     'scikit-learn>=0.20.0',
                     'matplotlib>=2.0.0',
-                    'vtk',
                     'nibabel',
                     'pillow',
                     'pandas']
