@@ -14,7 +14,6 @@ from scipy.spatial import KDTree
 from sklearn.utils import check_random_state
 from sklearn.base import BaseEstimator
 
-from ..vtk_interface.wrappers import BSPolyData
 from ..mesh import mesh_elements as me
 
 
@@ -117,7 +116,7 @@ def spin_permutations(spheres, data, unique=False, n_rep=100,
 
     Parameters
     ----------
-    spheres : dict[str, ndarray or BSPolyData], BSPolyData or ndarray
+    spheres : dict[str, ndarray] or ndarray
         Dictionary of points in a sphere, for left ('lh' key) and
         right ('rh' key) hemispheres. The right hemisphere is optional. If
         provided, rotations are derived from the rotations computed for
@@ -165,7 +164,7 @@ def spin_permutations(spheres, data, unique=False, n_rep=100,
     if isinstance(data, np.ndarray):
         data = {'lh': data}
 
-    if isinstance(spheres, BSPolyData) or isinstance(spheres, np.ndarray):
+    if isinstance(spheres, np.ndarray):
         spheres = {'lh': spheres}
 
     if data.keys() != spheres.keys():
@@ -252,10 +251,10 @@ class SpinPermutations(BaseEstimator):
 
         Parameters
         ----------
-        points_lh : BSPolyData or ndarray, shape = (n_lh, 3)
+        points_lh : ndarray, shape = (n_lh, 3)
             Sphere for the left hemisphere. If ndarray, each row must
             represent a vertex in the sphere.
-        points_rh : BSPolyData or ndarray, shape = (n_rh, 3), optional
+        points_rh : ndarray, shape = (n_rh, 3), optional
             Sphere for the right hemisphere. If ndarray, row must
             represent a vertex in the sphere. Default is None.
 
